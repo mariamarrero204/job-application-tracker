@@ -1,0 +1,10 @@
+{% extends 'base.html' %}{% block title %}{{ 'Edit company' if is_edit else 'New company' }}{% endblock %}{% block breadcrumb %}<a href="{{ url_for('companies') }}">Companies</a> / {{ 'Edit' if is_edit else 'New' }}{% endblock %}
+{% block content %}<section class="page-heading"><div><div class="eyebrow">COMPANY RECORD</div><h1>{{ 'Edit company' if is_edit else 'Add a company' }}<span class="heading-point">.</span></h1><p class="subtitle">Save the details that matter for your search.</p></div></section>
+<form method="post" class="panel form-panel"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><div class="form-section-label">COMPANY DETAILS</div><div class="form-grid">
+<label class="field field-full">Company name <span class="required">*</span><input name="company_name" maxlength="100" value="{{ record.company_name or '' }}" required placeholder="e.g., Acme Technologies"></label>
+<label class="field">Industry<input name="industry" maxlength="50" value="{{ record.industry or '' }}" placeholder="e.g., Technology"></label>
+<label class="field">Website<input name="website" maxlength="200" type="url" value="{{ record.website or '' }}" placeholder="https://example.com"></label>
+<label class="field">City<input name="city" maxlength="50" value="{{ record.city or '' }}" placeholder="e.g., Miami"></label>
+<label class="field">State<input name="state" maxlength="50" value="{{ record.state or '' }}" placeholder="e.g., Florida"></label>
+<label class="field field-full">Notes<textarea name="notes" rows="5" placeholder="Company culture, research, or reminders...">{{ record.notes or '' }}</textarea></label></div>
+<div class="form-footer"><a class="button button-quiet" href="{{ url_for('company_detail', record_id=record_id) if is_edit else url_for('companies') }}">Cancel</a><button type="submit" class="button button-primary">{{ 'Save changes' if is_edit else 'Create company' }}</button></div></form>{% endblock %}

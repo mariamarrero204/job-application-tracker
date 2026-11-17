@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<section class="page-heading"><div><div class="eyebrow">CAREER OVERVIEW</div><h1>Your search at a glance<span class="heading-point">.</span></h1><p class="subtitle">One home for every opportunity, connection, and next step.</p></div><a class="button button-primary" href="{{ url_for('application_new') }}">+ Track application</a></section>
+<section class="metrics" aria-label="Job search statistics">
+  <article class="metric-card metric-featured"><div class="metric-label">Total applications <span class="metric-glyph">↗</span></div><div class="metric-value">{{ counts.applications }}</div><div class="metric-foot">Your tracked opportunities</div></article>
+  <article class="metric-card"><div class="metric-label">Active pipeline <span class="metric-glyph">◉</span></div><div class="metric-value">{{ counts.active }}</div><div class="metric-foot">Still in progress</div></article>
+  <article class="metric-card"><div class="metric-label">Interviews <span class="metric-glyph">◎</span></div><div class="metric-value">{{ counts.interviews }}</div><div class="metric-foot">In the interview stage</div></article>
+  <article class="metric-card"><div class="metric-label">Offers <span class="metric-glyph">✧</span></div><div class="metric-value">{{ counts.offers }}</div><div class="metric-foot">Ready for your next move</div></article>
+</section>
+<div class="dashboard-grid">
+  <section class="panel"><div class="panel-heading"><div><div class="eyebrow">LATEST ACTIVITY</div><h2>Recent applications</h2></div><a class="text-link" href="{{ url_for('applications') }}">View all →</a></div>
+    {% if recent %}<div class="table-scroll"><table><thead><tr><th>Position</th><th>Company</th><th>Date</th><th>Status</th></tr></thead><tbody>{% for item in recent %}<tr><td><a class="record-link" href="{{ url_for('application_detail', record_id=item.application_id) }}">{{ item.job_title }}</a></td><td>{{ item.company_name }}</td><td class="muted-nowrap">{{ item.application_date|datefmt }}</td><td><span class="status status-{{ item.status|lower }}">{{ item.status }}</span></td></tr>{% endfor %}</tbody></table></div>
+    {% else %}<div class="empty-state"><div class="empty-symbol">◉</div><h3>No applications yet</h3><p>Start tracking a position to see your activity here.</p><a class="button button-secondary" href="{{ url_for('application_new') }}">Add an application</a></div>{% endif %}
+  </section>
+  <section class="panel stats-panel"><div class="panel-heading"><div><div class="eyebrow">PIPELINE HEALTH</div><h2>By status</h2></div></div>
+    {% if breakdown %}<div class="status-list">{% for entry in breakdown %}<div class="status-row"><div><span class="legend-dot status-bg-{{ entry.status|lower }}"></span>{{ entry.status }}</div><strong>{{ entry.total }}</strong></div><div class="progress-track"><div class="progress-fill progress-{{ entry.status|lower }}" style="width: {{ entry.total * 100 / counts.applications if counts.applications else 0 }}%"></div></div>{% endfor %}</div>
+    {% else %}<p class="hint-text">Application statuses will appear here once you add your first one.</p>{% endif %}
+  </section>
+</div>
+<section class="panel quick-panel"><div class="panel-heading"><div><div class="eyebrow">BUILD YOUR NETWORK</div><h2>Keep the momentum going</h2></div></div><div class="quick-grid"><a href="{{ url_for('companies') }}" class="quick-action"><span>▦</span><strong>{{ counts.companies }} companies</strong><small>Explore organizations →</small></a><a href="{{ url_for('jobs') }}" class="quick-action"><span>▤</span><strong>{{ counts.jobs }} saved jobs</strong><small>Review opportunities →</small></a><a href="{{ url_for('contacts') }}" class="quick-action"><span>♙</span><strong>{{ counts.contacts }} contacts</strong><small>Manage connections →</small></a><a href="{{ url_for('job_match') }}" class="quick-action"><span>✧</span><strong>Find your fit</strong><small>Compare your skills →</small></a></div></section>
+{% endblock %}

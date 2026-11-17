@@ -1,0 +1,47 @@
+{% extends 'base.html' %}{% block title %}Applications{% endblock %}{% block breadcrumb %}Applications{% endblock %}
+{% block content %}
+<section class="page-heading">
+    <div>
+        <div class="eyebrow">YOUR PIPELINE</div>
+        <h1>Applications<span class="heading-point">.</span></h1>
+        <p class="subtitle">Track every submission, interview, and decision.</p></div>
+    <a class="button button-primary" href="{{ url_for('application_new') }}">+ Track application</a></section>
+<section class="panel listing-panel">
+    <div class="panel-heading"><h2>All applications <span class="count-bubble">{{ records|length }}</span></h2></div>
+    {% if records %}
+    <div class="table-scroll">
+        <table>
+            <thead>
+            <tr>
+                <th>Position</th>
+                <th>Company</th>
+                <th>Applied</th>
+                <th>Status</th>
+                <th>Resume</th>
+                <th class="actions-col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>{% for r in records %}
+            <tr>
+                <td><a class="record-link" href="{{ url_for('application_detail', record_id=r.application_id) }}">{{
+                    r.job_title }}</a></td>
+                <td>{{ r.company_name }}</td>
+                <td>{{ r.application_date|datefmt }}</td>
+                <td><span class="status status-{{ r.status|lower }}">{{ r.status }}</span></td>
+                <td>{{ r.resume_version or '—' }}</td>
+                <td class="action-links"><a
+                        href="{{ url_for('application_detail', record_id=r.application_id) }}">View</a><a
+                        href="{{ url_for('application_edit', record_id=r.application_id) }}">Edit</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-symbol">◎</div>
+        <h3>Your pipeline starts here</h3>
+        <p>When you apply to a saved job, record the details so nothing slips through the cracks.</p><a
+            class="button button-secondary" href="{{ url_for('application_new') }}">Track an application</a></div>
+    {% endif %}
+</section>{% endblock %}

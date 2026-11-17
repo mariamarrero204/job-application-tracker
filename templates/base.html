@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111d33">
+  <title>{% block title %}Overview{% endblock %} · Job Application Tracker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="{{ url_for('dashboard') }}" aria-label="Job Application Tracker Home">
+        <span class="brand-mark">JT</span>
+        <span class="brand-label">jobtrack<span class="brand-dot">.</span><small>YOUR CAREER HUB</small></span>
+      </a>
+      <div class="nav-heading">WORKSPACE</div>
+      <nav class="navigation" aria-label="Main navigation">
+        <a class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}"><span class="nav-icon">◫</span> Dashboard</a>
+        <a class="nav-link {% if request.endpoint and request.endpoint.startswith('compan') %}active{% endif %}" href="{{ url_for('companies') }}"><span class="nav-icon">▦</span> Companies</a>
+        <a class="nav-link {% if request.endpoint and request.endpoint.startswith('job_') and request.endpoint != 'job_match' or request.endpoint == 'jobs' %}active{% endif %}" href="{{ url_for('jobs') }}"><span class="nav-icon">▤</span> Jobs</a>
+        <a class="nav-link {% if request.endpoint and request.endpoint.startswith('application') %}active{% endif %}" href="{{ url_for('applications') }}"><span class="nav-icon">◎</span> Applications</a>
+        <a class="nav-link {% if request.endpoint and request.endpoint.startswith('contact') %}active{% endif %}" href="{{ url_for('contacts') }}"><span class="nav-icon">♙</span> Contacts</a>
+      </nav>
+      <div class="nav-heading nav-heading-second">TOOLS</div>
+      <nav class="navigation" aria-label="Tools">
+        <a class="nav-link {% if request.endpoint == 'job_match' %}active{% endif %}" href="{{ url_for('job_match') }}"><span class="nav-icon">✧</span> Job Match <span class="small-pill">NEW</span></a>
+      </nav>
+      <div class="sidebar-bottom"><span class="sidebar-star">✦</span><strong>Stay organized.</strong><p>Every application is a step toward what’s next.</p></div>
+    </aside>
+    <div class="main-area">
+      <header class="topbar"><div class="breadcrumbs">WORKSPACE <span>/</span> {% block breadcrumb %}Dashboard{% endblock %}</div><div class="topbar-tag"><span class="status-dot"></span> YOUR SEARCH, SIMPLIFIED</div></header>
+      <main class="content" id="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}<div class="alerts" role="status">{% for category, message in messages %}<div class="alert alert-{{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+      </main>
+      <footer class="footer">JOBTRACK <span>·</span> COP4751 Course Project <span>·</span> Built with Flask + MySQL</footer>
+    </div>
+  </div>
+</body>
+</html>
