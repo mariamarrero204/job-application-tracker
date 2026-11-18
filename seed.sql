@@ -1,4 +1,4 @@
--- OPTIONAL demo data for your 3–7 minute recording.
+-- OPTIONAL demo data.
 -- Import once into the database created by schema.sql.
 -- It will add new records on each run; avoid re-importing repeatedly.
 USE job_tracker;
